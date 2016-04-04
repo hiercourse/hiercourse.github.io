@@ -2539,7 +2539,7 @@
 					border: 0;
 					color: #ffffff !important;
 					display: block;
-					padding: 0.85em 0;
+					padding: 0.75em 0;   /* controls height of menu items! RAD */
 					text-decoration: none;
 				}
 
