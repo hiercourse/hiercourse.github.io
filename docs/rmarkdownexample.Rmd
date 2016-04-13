@@ -69,8 +69,6 @@ puptab <- puptab[,c("CO2_treatment","T_treatment","Frass.mean","Frass.sd","Pupal
 # Rename
 names(puptab) <- c("CO2","T","Frass","SD","PupalWeight","SD")
 
-# Round if the variable is 'double' (i.e. not integer or character)
-puptab <- as.data.frame(lapply(puptab, function(x)if(is.double(x))round(x,2)else x))
 ```
 
 # Results
@@ -125,7 +123,7 @@ The following table is made with the kable function from the knitr package. Note
 ```{r echo=TRUE, results="asis"}
 library(knitr)
 
-kable(puptab, caption="Table 1. Summary stats for the pupae data.")
+kable(puptab, caption="Table 1. Summary stats for the pupae data.", digits=3)
 ```
 
 The last version uses the pander function from the package with the same name.
