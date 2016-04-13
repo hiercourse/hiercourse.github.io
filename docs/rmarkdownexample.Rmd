@@ -1,0 +1,138 @@
+---
+title: "Analysis of the pupae data in rmarkdown"
+author: "Remko Duursma"
+date: "13 April 2016"
+output: word_document
+---
+  
+
+```{r echo=FALSE, eval=FALSE}
+# INSTRUCTIONS - READ FIRST
+
+# This file is a so-called 'rmarkdown' file. It combines text formatted in markdown,
+# a common very easy-to-use language to format documents, with R code. To run this example,
+# you need to have the following packages installed:
+# knitr, rmarkdown, doBy
+
+# This Rmd file can be converted to a Word document, where all R code is going to be executed for 
+# us, and the results of the R code placed inside the document (including text, figures, etc).
+
+# --> To do this, click the 'Knit Word' button that appears just above this window in Rstudio.
+# If it fails, you probably do not have some of the packages installed that are mentioned above.
+# If it works, a Word document will open up. Compare the output to the code below.
+# --> Also try to convert this document into an HTML document, which displays very nicely in a browser.
+# To do this, select 'Knit HTML' from the menu that, by default, displays 'Knit Word' (click on the small triangle)
+
+
+# The R code can appear in so-called 'code chunks', or even as code within text.
+# This text also appears in a code chunk, and note that I have set two options:
+# echo=FALSE (this will not appear in the Word document we are constructing), and
+# eval=FALSE (this code will not even be executed, handy when a code chunk contains code that
+# does not work or takes too long to run!)
+
+# For more options and instructions, see rmarkdown.rstudio.com (for all things markdown, which affects
+# the formatting of text outside code chunks), and http://yihui.name/knitr/options/ (for all options that you can give to the code chunks).
+```
+
+
+
+
+
+
+# Introduction
+
+This dataset is from an experiment where larvae were left to feed on *Eucalyptus* leaves,
+in a glasshouse that was controlled at two different levels of temperature and CO~2~ concentration.
+After the larvae pupated (that is, turned into pupae), the body weight was measured, as well as the cumulative 'frass' (larvae excrement) over the entire time it took to pupate.
+
+Note the formatting above, we can have *italic*, or even **bold** text, super^script^ and sub~script~.
+
+
+  
+```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+# This is an example of a code block which you do not want to include in
+# the final document (echo=FALSE)
+# We also set message=FALSE, and warning=FALSE, to avoid inclusion of messages
+# and warnings in the final document.
+
+pupae <- read.csv("pupae.csv")
+pupae$CO2_treatment <- as.factor(pupae$CO2_treatment)
+
+library(doBy)
+puptab <- summaryBy(Frass + PupalWeight ~ CO2_treatment + T_treatment,
+                    data=pupae, FUN=c(mean, sd), na.rm=TRUE)
+
+# It is more convenient to reorder the dataframe to have sd and mean
+# together.
+puptab <- puptab[,c("CO2_treatment","T_treatment","Frass.mean","Frass.sd","PupalWeight.mean","PupalWeight.sd")]
+
+# Rename
+names(puptab) <- c("CO2","T","Frass","SD","PupalWeight","SD")
+
+# Round if the variable is 'double' (i.e. not integer or character)
+puptab <- as.data.frame(lapply(puptab, function(x)if(is.double(x))round(x,2)else x))
+```
+
+# Results
+
+In rmarkdown, results from statistical analyses are shown in grey boxes. For example,
+
+```{r}
+lmfit <- lm(Frass ~ PupalWeight * Gender, data=pupae)
+anova(lmfit)
+```
+
+The above result simply shows the text output of the anova, which is useful in itself but not very pretty. To make a quick pretty table, we can use the `kable` function from the knitr package.
+
+```{r}
+library(knitr)
+kable(anova(lmfit))
+```
+
+The above table is converted to an actual Word table, so you can change formatting in the usual way.
+
+## Inline results
+
+Another very useful feature of rmarkdown is that you can include results within text. For example, I calculated the standard deviation of Frass to be `r sd(pupae$PupalWeight)`, and the R^2^ of the regression shown above was `r summary(lmfit)$r.squared`. 
+
+
+# Figures
+
+It is straightforward to include code and output in markdown, this includes figures. Unfortunately we cannot add automatic captions to the figures.
+
+```{r dpi=300}
+# Example where we show the code to make the figure.
+# Note the code chunk option 'dpi=300', this increases the resolution of the figure,
+# which is otherwise quite low.
+with(pupae, plot(Frass, PupalWeight, pch=c(1,19)[CO2_treatment],
+                 col=c("blue","red")[T_treatment]))
+```
+
+
+```{r echo=FALSE, dpi=300}
+# Example where we do not show the code
+boxplot(Frass ~ Gender, data=pupae, xlab="Gender", ylab="Frass")
+```
+
+The code for the above figure is not shown in the Word document.
+
+# Tables
+
+Including tables with results into Word has always been a struggle. Not anymore. Below are two options to include tables in Word based on a summary table made with `summaryBy`.
+
+The following table is made with the kable function from the knitr package. Note how we include a caption for the table as an argument to kable.
+
+```{r echo=TRUE, results="asis"}
+library(knitr)
+
+kable(puptab, caption="Table 1. Summary stats for the pupae data.")
+```
+
+The last version uses the pander function from the package with the same name.
+
+```{r results="asis", echo=TRUE, eval=FALSE}
+# This code chunk does not execute by default, install pander and set eval=TRUE first
+library(pander)
+pander(puptab)
+```
+
