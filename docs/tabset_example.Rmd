@@ -1,0 +1,32 @@
+---
+title: "Untitled"
+author: "Remko Duursma"
+date: "15 February 2017"
+output: html_document
+---
+  
+
+# Example {.tabset .tabset-fade .tabset-pills}
+
+## Plot 1
+
+```{r}
+plot(1)
+```
+
+## Plot 2
+
+```{r}
+plot(2)
+```
+
+
+## Plot 3
+
+```{r}
+plot(3)
+```
+
+
+
+

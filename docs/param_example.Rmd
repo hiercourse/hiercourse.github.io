@@ -1,0 +1,29 @@
+---
+title: "Parameterized example"
+author: "Remko Duursma"
+date: "17 February 2017"
+output: html_document
+params:
+  datafile: Allometry.csv
+---
+
+
+```{r, message=FALSE}
+library(Hmisc)
+```
+
+
+```{r}
+dat <- read.csv(params$datafile)
+
+message(params$datafile)
+describe(dat)
+```
+
+
+
+```{r, eval=FALSE}
+# Run from R
+rmarkdown::render("param_example.Rmd", params=list(datafile="pupae.csv"))
+```
+
