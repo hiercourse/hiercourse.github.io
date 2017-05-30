@@ -5,11 +5,12 @@ date: "8 July 2016"
 output: word_document
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Inserting tables into Word}
+# Inserting tables into Word
 
 To run this example rmarkdown file, make sure to place it in a folder where you have downloaded the pupae dataset ("pupae.csv")
 
