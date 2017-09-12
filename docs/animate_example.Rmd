@@ -1,10 +1,9 @@
 ---
-title: "Untitled"
-author: "Remko Duursma"
-date: "15 February 2017"
+title: "Animated figures in rmarkdown"
+author: "Remko"
+date: "12 September 2017"
 output: html_document
 ---
-
 
 ```{r, fig.show='animate', interval=0.025}
 
@@ -13,11 +12,3 @@ for(i in val) curve(sin(x-i), from=0, to=4*pi)
 
 
 ```
-
-
-vfiul;bsav;iubad vouiiudfhviadfouv
-
-```{r}
-
-```
-
