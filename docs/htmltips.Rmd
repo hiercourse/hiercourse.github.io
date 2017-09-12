@@ -1,0 +1,53 @@
+---
+title: "Some rmarkdown tips"
+author: "Remko"
+date: "12 September 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Inline code
+
+We can put R code inline. For example, the mean of a set of 10 random numbers is `r mean(runif(10))`. 
+Note that some rounding may be useful, like `r round(mean(runif(10)), 3)`.
+
+
+# Tables
+
+See the example doc on making tables. But here is a quick example, using the built-in mtcars dataset.
+
+```{r}
+library(knitr)
+kable(mtcars[1:6,], caption="**Table 1.** The first 6 rows of the mtcars dataset")
+```
+
+We can even use that to format output of linear regression,
+
+```{r}
+fit <- lm(mpg ~ hp, data=mtcars)
+kable(anova(fit))
+```
+
+
+# Figures.
+
+\
+The size of the figure in the document can best be controlled by setting dpi (dots per inch) and out.width (in number of pixels).
+
+```{r, dpi=300, echo=FALSE, out.width="600px"}
+par(mar=c(5,5,2,2))
+palette(rainbow(3))
+with(mtcars,plot(hp, mpg, pch=21, 
+                 xlab="Horse power",
+                 ylab="Miles per gallon",
+                 bg=as.factor(gear), cex=1.2))
+legend("topright", levels(as.factor(mtcars$gear)), pch=21, pt.bg=palette(),
+       title="Gears")
+```
+
+
+
