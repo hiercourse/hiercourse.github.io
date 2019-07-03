@@ -92,6 +92,8 @@ pander(puptab,
 A third option for formatting tables is the pixiedust package. It uses a different syntax from those we've seen so far:
 ```{r echo=TRUE}
 # pixiedust requires broom for table formatting
+# also loading tidyverse packages to ensure file knits properly 
+library(tidyverse)
 library(broom)
 library(pixiedust)
 
